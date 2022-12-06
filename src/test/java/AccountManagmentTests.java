@@ -1,6 +1,7 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import static org.mockito.Mockito.when;
@@ -9,7 +10,6 @@ import java.io.PrintStream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.stubbing.Answer;
 
 public class AccountManagmentTests {
     
@@ -21,8 +21,7 @@ public class AccountManagmentTests {
     void setUp() {
         printStream = mock(PrintStream.class);
         reader = mock(LineReader.class);
-       
-        
+
         accountManagement = new AccountManagement(printStream, reader);
     }
 
@@ -56,27 +55,46 @@ public class AccountManagmentTests {
 
     @Test
     public void menuOptionSelectCreateAccountStartsCreateAccountProcess() {
+        when(reader.readInt()).thenReturn(2);
         accountManagement.menu();
         
         verify(printStream).println(contains("Create Account"));
         verify(printStream).println(contains("Quit"));
-
-
     }
 
     @Test
-    public void selectingCreateAccountPropmptsToCreateAccount(){
+    public void promptsForCreateAccountWhenSelectingCreateAccount(){
         when(reader.readInt()).thenReturn(1);
         
         accountManagement.menu();
 
         verify(printStream).println(contains("Please enter account holder name:"));
     }
+
     @Test
-    public void selectingQuitWhenPromptedForOptions(){
+    public void programExitsWhenSelectingQuit(){
         when(reader.readInt()).thenReturn(2);
         accountManagement.menu();
-        verify(printStream).println(contains("Exiting"));;
+        verify(printStream).println(contains("Exiting"));
     }
 
+    @Test
+    public void menuReturnsTrueWhenSelectingCreateAccount(){
+        AccountManagement accountManagementM = mock(AccountManagement.class);
+
+        when(reader.readInt()).thenReturn(1);
+        when(reader.readLine()).thenReturn("bill");
+        when(reader.readInt()).thenReturn(2);
+
+        accountManagementM.menu();
+
+        verify(accountManagementM, times(1)).submit();
+    }
+
+    @Test void menuReturnsFalseWhenSelectQuit(){
+        when(reader.readInt()).thenReturn(1);
+        
+        accountManagement.menu();
+;
+    }
 }

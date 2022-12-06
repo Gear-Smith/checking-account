@@ -7,6 +7,8 @@ public class AccountManagement {
     private HashMap<String, Account> accounts;
     private PrintStream printStream;
     private LineReader reader;
+    private boolean returnToMenu;
+   
 
     public AccountManagement(PrintStream printStream, LineReader reader) {
         this.printStream = printStream;
@@ -20,6 +22,8 @@ public class AccountManagement {
 
         Account account = new Account(0.0, name);
         accounts.put(name, account);
+
+        printStream.printf(String.format("Account for %s was created", name));
     }
 
     public String getName() {
@@ -30,24 +34,26 @@ public class AccountManagement {
         return accounts.get(accountHolder);
     }
 
-    public int menu() {
-        printStream.println("""
+    public void menu() {
+        returnToMenu = true;
+        while(returnToMenu == true){
+            printStream.println("""
 
-                1. Create Account
-                2. Quit
+                    1. Create Account
+                    2. Quit
 
-                Option: """);
+                    Option: """);
 
-        int selection = reader.readInt();
+            int selection = reader.readInt();
 
-        switch (selection) {
-            case 1: this.submit();
-                break;
-            case 2: printStream.println("Exiting Program");
-            default:
-                break;
+            switch (selection) {
+                case 1: this.submit();
+                    returnToMenu = true;
+                case 2: printStream.println("Exiting Program");
+                    returnToMenu = false;
+                default:
+                    break;
+            }
         }
-        return 0;
     }
-
 }
