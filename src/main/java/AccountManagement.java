@@ -30,8 +30,8 @@ public class AccountManagement {
         return accounts.get(accountHolder);
     }
 
-    public void menu() {
-        System.out.println("""
+    public int menu() {
+        printStream.println("""
 
                 1. Create Account
                 2. Quit
@@ -39,7 +39,15 @@ public class AccountManagement {
                 Option: """);
 
         int selection = reader.readInt();
-        
+
+        switch (selection) {
+            case 1: this.submit();
+                break;
+            case 2: printStream.println("Exiting Program");
+            default:
+                break;
+        }
+        return 0;
     }
 
 }

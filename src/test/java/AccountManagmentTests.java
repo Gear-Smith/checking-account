@@ -9,6 +9,7 @@ import java.io.PrintStream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.stubbing.Answer;
 
 public class AccountManagmentTests {
     
@@ -20,7 +21,7 @@ public class AccountManagmentTests {
     void setUp() {
         printStream = mock(PrintStream.class);
         reader = mock(LineReader.class);
-        System.setOut(printStream);
+       
         
         accountManagement = new AccountManagement(printStream, reader);
     }
@@ -59,7 +60,23 @@ public class AccountManagmentTests {
         
         verify(printStream).println(contains("Create Account"));
         verify(printStream).println(contains("Quit"));
+
+
     }
 
+    @Test
+    public void selectingCreateAccountPropmptsToCreateAccount(){
+        when(reader.readInt()).thenReturn(1);
+        
+        accountManagement.menu();
+
+        verify(printStream).println(contains("Please enter account holder name:"));
+    }
+    @Test
+    public void selectingQuitWhenPromptedForOptions(){
+        when(reader.readInt()).thenReturn(2);
+        accountManagement.menu();
+        verify(printStream).println(contains("Exiting"));;
+    }
 
 }

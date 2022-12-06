@@ -8,10 +8,14 @@ public class LineReader {
     }
 
     public String readLine(){
+        scanner.next();
         return scanner.nextLine();
     }
 
     public int readInt() {
+        scanner.next();
         return scanner.nextInt();
+        
     }
+
 }
