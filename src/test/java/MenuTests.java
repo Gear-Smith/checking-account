@@ -20,9 +20,19 @@ public class MenuTests {
     void setUp() {
         printStream = mock(PrintStream.class);
         reader = mock(LineReader.class);
-        //accountManagement = mock(AccountManagement.class);
-        accountManagement = new AccountManagement(printStream, reader);
+        accountManagement = mock(AccountManagement.class);
+        
         menu = new Menu(printStream, reader, accountManagement);
+    }
+
+    @Test
+    public void menuOptionSelectCreateAccountStartsCreateAccountProcess() {
+        when(reader.readLine()).thenReturn("q");
+        
+        menu.start();
+        
+        verify(printStream).println(contains("Create Account"));
+        verify(printStream).println(contains("Quit"));
     }
 
     @Test
@@ -51,7 +61,39 @@ public class MenuTests {
 
         verify(printStream).println(contains("Exiting"));
     }
+    
+    @Test
+    public void whenAnAccountIsCreatedThenTheMainLoopReturnsToTheMenuPrompt() {
+        when(reader.readLine())
+        .thenReturn("1")
+        .thenReturn("Bill")
+        .thenReturn("1")
+        .thenReturn("Bill")
+        .thenReturn("q");
 
+        menu.start();
+        
+        verify(accountManagement, times(2)).submit();
+    }
 
+    @Test
+    public void whenMenuPrintsThenAllOptionsArePresent() {
+        String menuOptions = """
+        1. Create Account
+        2. Search Balance
+        3. Make Deposite
+        4. Make Withdraw
+        q. Quit
+
+        Option: 
+        """;
+
+        when(reader.readLine()).thenReturn("q");
+
+        menu.start();
+
+        verify(printStream).println(contains(menuOptions));
+    }
+    
     
 }

@@ -8,11 +8,13 @@ public class Menu {
     private AccountManagement accountManagement;
 
     private String menuOptions = """
-                1. Create Account
-                2. Search Balance
-                q. Quit
+            1. Create Account
+            2. Search Balance
+            3. Make Deposite
+            4. Make Withdraw
+            q. Quit
 
-                Option: 
+            Option: 
             """;
 
     public Menu(PrintStream printStream, LineReader reader, AccountManagement accountManagement) {
@@ -32,7 +34,13 @@ public class Menu {
                 case "1": this.accountManagement.submit();
                     returnToMenu = true;
                     break;
-                case "2":  printStream.println(accountManagement.getIndividualAccount());
+                case "2":  printStream.println(accountManagement.getIndividualAccountInfo());
+                    returnToMenu = true;
+                    break;
+                case "3":  accountManagement.makeDeposit();
+                    returnToMenu = true;
+                    break;
+                case "4":  accountManagement.makeWithdraw();
                     returnToMenu = true;
                     break;
                 case "q": printStream.println("Exiting Program");

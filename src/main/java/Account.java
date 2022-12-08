@@ -15,7 +15,7 @@ public class Account {
     public String showAccountInfo() {
         String accountInfo = String.format("""
             Account Number: %s
-            The Current Balance is: %f """, this.getAccountNumberString(), this.balance);
+            The Current Balance is: %.2f """, this.getAccountNumberString(), this.balance);
 
         return accountInfo;
     }
@@ -23,9 +23,21 @@ public class Account {
     public String getAccountNumberString() {
         return "#000" + String.valueOf(accountNumber);
     }
-    
-    // public void setAccountNumber(int accountNumber) {
-    //     this.accountNumber = accountNumber;
-    // }
+
+    public void deposit(Double amount) {
+        this.balance += amount;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String withdraw(Double amount) {
+        if (this.balance - amount < 0.0) {return "Withdraw Unsuccessful";}
+        
+        this.balance -= amount;
+
+        return "Withdraw Successful";
+    }
 }
     
