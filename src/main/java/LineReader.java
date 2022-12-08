@@ -18,5 +18,4 @@ public class LineReader {
     public double readDbl() {
         return scanner.nextDouble();
     }
-
 }

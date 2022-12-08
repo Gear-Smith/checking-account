@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,14 +16,14 @@ public class MenuTests {
     private PrintStream printStream;
     private AccountManagement accountManagement;
     private Menu menu;
-
+    
     @BeforeEach
     void setUp() {
         printStream = mock(PrintStream.class);
         reader = mock(LineReader.class);
         accountManagement = mock(AccountManagement.class);
         
-        menu = new Menu(printStream, reader, accountManagement);
+        menu = new Menu(printStream, reader, accountManagement, new HashMap<String, Command>());
     }
 
     @Test

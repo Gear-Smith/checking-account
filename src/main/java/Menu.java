@@ -1,11 +1,12 @@
 import java.io.PrintStream;
+import java.util.HashMap;
 
 public class Menu {
-    private Boolean returnToMenu = true;
     private String selection = "";
     private PrintStream printStream;
     private LineReader reader;
     private AccountManagement accountManagement;
+    private HashMap<String, Command> commandMap;
 
     private String menuOptions = """
             1. Create Account
@@ -17,38 +18,31 @@ public class Menu {
             Option: 
             """;
 
-    public Menu(PrintStream printStream, LineReader reader, AccountManagement accountManagement) {
+    public Menu(PrintStream printStream, LineReader reader, AccountManagement accountManagement, HashMap<String, Command> commandMap) {
         this.printStream = printStream;
         this.reader = reader;
         this.accountManagement = accountManagement;
+        this.commandMap = commandMap;
     }
     
     public void start() {
-        returnToMenu = true;
-        while(returnToMenu == true){
+        
+        while(!this.selection.equals("q")){
+            
+            //this.prompt(menuOptions, String.class);
             printStream.println(menuOptions);
 
             this.selection = reader.readLine();
+            
+            commandMap.put("1", new SubmitApplicationCommand(accountManagement));
+            commandMap.put("2", new GetIndividualAccountInfoCommand(accountManagement));
+            commandMap.put("3", new MakeDepositCommand(accountManagement));
+            commandMap.put("4", new MakeWithdrawCommand(accountManagement));
+            commandMap.put("q", new QuitCommand(printStream));
 
-            switch (selection) {
-                case "1": this.accountManagement.submit();
-                    returnToMenu = true;
-                    break;
-                case "2":  printStream.println(accountManagement.getIndividualAccountInfo());
-                    returnToMenu = true;
-                    break;
-                case "3":  accountManagement.makeDeposit();
-                    returnToMenu = true;
-                    break;
-                case "4":  accountManagement.makeWithdraw();
-                    returnToMenu = true;
-                    break;
-                case "q": printStream.println("Exiting Program");
-                    returnToMenu = false;
-                    break;
-                default:
-                    break;
-            }
+            if (commandMap.containsKey(selection)) {
+                commandMap.get(selection).execute();
+            }   
         }
     }
 }
