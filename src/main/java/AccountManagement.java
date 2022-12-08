@@ -12,7 +12,6 @@ public class AccountManagement {
         this.printStream = printStream;
         this.reader = reader;
         this.accounts = new HashMap<>();
-        // this.lastAccountNumber = 1;
     }
 
     public Account create(String name) {
@@ -23,27 +22,45 @@ public class AccountManagement {
 
         return account;
     }
-
-    public int submit() {
+    
+    public void submit() {
         this.printStream.println("Please enter account holder name:"); 
         String name = reader.readLine();    
         
         Account newAccount = this.create(name);
 
         printStream.println(String.format("Account for %s was created \n " + newAccount.showAccountInfo(), name));
-        
-        return 0;
     }
 
-    public String getIndividualAccount() {
+    public String getIndividualAccountInfo() {
         int accountNumber = reader.readInt();
-
-        System.out.println("*********"+accountNumber);
-        System.out.println( accounts.toString());
-        
-        accounts.forEach((key, value)-> {System.out.println(key);});
         Account theAccount = accounts.get(accountNumber);
-
         return theAccount.showAccountInfo();
+    }
+
+    public void makeDeposit() {
+        printStream.println("Enter account number:");
+        String accountNumber = reader.readLine();
+        printStream.println("Enter amount of deposit:");
+        Double amount = reader.readDbl();
+
+        Account account = accounts.get(Integer.parseInt(accountNumber));
+        account.deposit(amount);
+        printStream.println(account.showAccountInfo()); 
+    }
+
+    public void makeWithdraw() {
+        printStream.println("Enter account number:");
+        String accountNumber = reader.readLine();
+        printStream.println("Enter amount of withdraw:");
+        Double amount = reader.readDbl();
+
+        Account account = accounts.get(Integer.parseInt(accountNumber));
+        
+        printStream.println(account.withdraw(amount));
+        
+        printStream.println(account.showAccountInfo()); 
+
+        
     }
 }
