@@ -8,7 +8,6 @@ public class LineReader {
     }
 
     public String readLine(){
-        scanner.next();
         return scanner.nextLine();
     }
 

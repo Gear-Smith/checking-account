@@ -1,28 +1,31 @@
 
 public class Account {
 
+    private int accountNumber;
+    
     private double balance;
     private String name;
     
-    public Account(double balance, String name) {
+    public Account(double balance, String name, int accountNumber) {
         this.balance = balance;
         this.name = name;
+        this.accountNumber = accountNumber;
     }
 
-    public String getName() {
-        return this.name;
-    }
+    public String showAccountInfo() {
+        String accountInfo = String.format("""
+            Account Number: %s
+            The Current Balance is: %f """, this.getAccountNumberString(), this.balance);
 
-    public double getBalance() {
-        return this.balance;
+        return accountInfo;
     }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
+    
+    public String getAccountNumberString() {
+        return "#000" + String.valueOf(accountNumber);
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    
+    // public void setAccountNumber(int accountNumber) {
+    //     this.accountNumber = accountNumber;
+    // }
 }
+    
