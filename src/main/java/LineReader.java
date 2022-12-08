@@ -14,4 +14,5 @@ public class LineReader {
     public int readInt() {
         return scanner.nextInt();
     }
+
 }

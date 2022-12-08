@@ -1,4 +1,4 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -14,32 +14,26 @@ public class AccountManagmentTests {
     
     private PrintStream printStream;
     private LineReader reader;
+    private Menu menu;
     private AccountManagement accountManagement;
 
     @BeforeEach
     void setUp() {
         printStream = mock(PrintStream.class);
         reader = mock(LineReader.class);
-        System.setOut(printStream);
-        
+        //accountManagement = mock(AccountManagement.class);
         accountManagement = new AccountManagement(printStream, reader);
+        menu = new Menu(printStream, reader, accountManagement);
     }
 
     @Test
-    public void testAccountIsCreatedWhenUserNameIsGiven() {
-        when(reader.readLine()).thenReturn("Bill");
-
-        accountManagement.submit();
+    public void VerifyThatAccountCreationIsPrintedToConsole(){
         
-        assertEquals("Bill", accountManagement.getName());
-    }
-
-    @Test
-    public void canCreateNewAccountWithBalanceAndName() {
-        Account account = new Account(0, "Bill");
-
-        assertEquals("Bill", account.getName());
-        assertEquals(0.00, account.getBalance());
+        when(reader.readLine()).thenReturn("Bill");
+        accountManagement.submit();
+        verify(printStream).println(contains("Account for Bill was created"));
+        verify(printStream).println(contains("0.0"));
+        
     }
 
     @Test
@@ -47,19 +41,32 @@ public class AccountManagmentTests {
         when(reader.readLine()).thenReturn("Bill");
 
         accountManagement.submit();
-        Account account = accountManagement.getIndividualAccount("Bill");
+        // when(reader.readLine()).thenReturn("2");
+        when(reader.readInt()).thenReturn(2);
+        accountManagement.getIndividualAccount();
+        // Account account = accountManagement.getIndividualAccount("#0002");
 
-        assertEquals("Bill", account.getName());
-        assertEquals(0.00, account.getBalance());
+        // account.showAccountInfo();
+        
+        verify(printStream).println(contains("#0002"));
     }
 
     @Test
     public void menuOptionSelectCreateAccountStartsCreateAccountProcess() {
-        accountManagement.menu();
+        when(reader.readLine()).thenReturn("q");
+        
+        menu.start();
         
         verify(printStream).println(contains("Create Account"));
         verify(printStream).println(contains("Quit"));
     }
 
+    @Test
+    public void whenAccountIsCreatedThenAccountNumberIsDisplayedInConfirmation() {
+        when(reader.readLine()).thenReturn("Bill");
 
+        accountManagement.submit();
+
+        verify(printStream).println(contains("#000"));
+    }
 }

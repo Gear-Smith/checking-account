@@ -3,8 +3,8 @@ import java.util.HashMap;
 
 public class AccountManagement {
 
-    private String name;
-    private HashMap<String, Account> accounts;
+    private HashMap<Integer, Account> accounts;
+    private int lastAccountNumber = 1;
     private PrintStream printStream;
     private LineReader reader;
 
@@ -12,34 +12,38 @@ public class AccountManagement {
         this.printStream = printStream;
         this.reader = reader;
         this.accounts = new HashMap<>();
+        // this.lastAccountNumber = 1;
     }
 
-    public void submit() {
-        this.printStream.println("Please enter account holder name:");
-        this.name = reader.readLine();    
-
-        Account account = new Account(0.0, name);
-        accounts.put(name, account);
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Account getIndividualAccount(String accountHolder) {
-        return accounts.get(accountHolder);
-    }
-
-    public void menu() {
-        System.out.println("""
-
-                1. Create Account
-                2. Quit
-
-                Option: """);
-
-        int selection = reader.readInt();
+    public Account create(String name) {
+        this.lastAccountNumber += 1;
+        Account account = new Account(0.0, name, this.lastAccountNumber);
         
+        accounts.put(lastAccountNumber, account);
+
+        return account;
     }
 
+    public int submit() {
+        this.printStream.println("Please enter account holder name:"); 
+        String name = reader.readLine();    
+        
+        Account newAccount = this.create(name);
+
+        printStream.println(String.format("Account for %s was created \n " + newAccount.showAccountInfo(), name));
+        
+        return 0;
+    }
+
+    public String getIndividualAccount() {
+        int accountNumber = reader.readInt();
+
+        System.out.println("*********"+accountNumber);
+        System.out.println( accounts.toString());
+        
+        accounts.forEach((key, value)-> {System.out.println(key);});
+        Account theAccount = accounts.get(accountNumber);
+
+        return theAccount.showAccountInfo();
+    }
 }
